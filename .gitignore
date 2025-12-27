@@ -1,0 +1,25 @@
+# Unity 生成的缓存 / 临时文件
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild*/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+
+# VS / Rider 之类 IDE 的工程文件
+.vs/
+*.csproj
+*.sln
+*.user
+*.tmp
+*.pidb
+*.svd
+
+# Unity 自动生成的
+*.unitypackage
+
+# 操作系统垃圾
+.DS_Store
+Thumbs.db
+.vscode/
