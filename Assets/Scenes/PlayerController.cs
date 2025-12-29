@@ -23,7 +23,9 @@ public class PlayerController : MonoBehaviour
 
         // 计算速度
         Motion += Quaternion.Euler(0, 0, -AccelRotate) * Accel;
-        Motion = new Vector3(Motion.x * Friction.x, Motion.y * Friction.y, Motion.z * Friction.z);
+
+        float upfriction = (Motion.y > 0f) ? (0.99f / Friction.y) : 1f;  // 向上运动阻力降低
+        Motion = new Vector3(Motion.x * Friction.x, Motion.y * Friction.y * upfriction, Motion.z * Friction.z);
         
 
         // 计算位移

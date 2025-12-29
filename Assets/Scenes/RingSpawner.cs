@@ -34,8 +34,9 @@ public class RingSpawner : MonoBehaviour
 
     void SpawnRing()
     {
+        float xrandPos = Random.Range(-1f, 1f);
         Vector3 pos = new Vector3(
-            player.position.x + startX,
+            player.position.x + startX + xrandPos,
             player.position.y + Random.Range(-verticalRangemin, verticalRangemax),
             0
         );

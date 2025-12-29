@@ -21,6 +21,7 @@ public class CameraFollow : MonoBehaviour
     {
         // 摄像机理想位置（想去但立刻去不了）
         Distance = player.position + offset - transform.position;
+        if (Distance.magnitude < 0.1f) Distance = Vector3.zero;  // 防止抖动
 
         // 更新速度
         Motion += stiffness * Distance;
