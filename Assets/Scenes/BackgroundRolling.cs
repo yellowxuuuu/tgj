@@ -9,7 +9,8 @@ public class BackgroundRolling : MonoBehaviour
     public int tileOffset = 3;       // 向右平移多少块宽度，通常 = 背景块数量
     public Transform maincamera;         // 以摄像机为中心
     public CameraFollow maincameraFollow;   // 主摄像机跟随脚本
-    public float parallax = 0.05f;         // 视差速度系数
+    public float xparallax = 0.05f;         // 横向视差系数
+    public float yparallax = 0.05f;          // 纵向视差系数
 
     private Vector3 parallaxMotion;      // 视差速度
 
@@ -21,7 +22,7 @@ public class BackgroundRolling : MonoBehaviour
 
     void FixedUpdate()
     {
-        parallaxMotion = maincameraFollow.Motion * parallax;
+        parallaxMotion = new Vector3(maincameraFollow.Motion.x * xparallax, maincameraFollow.Motion.y * yparallax, 0);
         transform.position += parallaxMotion;
 
         // 如果这块背景的右边界比玩家落后很多，就搬到前面
