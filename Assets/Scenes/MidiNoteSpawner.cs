@@ -34,7 +34,7 @@ public class MidiNoteSpawner : MonoBehaviour
     public float speed = 1f;
 
     [Header("Ring")]
-    public Color initColor = Color.blue;
+    public Color initColor = Color.yellow;
 
     private MidiNotes data;
     private float bpm;
@@ -112,7 +112,7 @@ public class MidiNoteSpawner : MonoBehaviour
         float wave =
             0.75f * Mathf.Sin(2f * Mathf.PI * 0.125f * beats) +
             0.25f * Mathf.Sin(2f * Mathf.PI * 0.0833333f * beats + 1.7f) +
-            6f    * Mathf.Sin(2f * Mathf.PI * 0.01f * beats);
+            6f    * Mathf.Sin(2f * Mathf.PI * 0.01f * beats + 3.2f);
 
         // ---- 3) 小噪声：Perlin（连续、不会跳）
         // PerlinNoise 输出 [0,1] -> 转成 [-1,1]

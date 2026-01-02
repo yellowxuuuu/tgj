@@ -42,7 +42,7 @@ public class SpringSpawner : MonoBehaviour
             player.position.y + Random.Range(-verticalRangemin, verticalRangemax),
             0
         );
-        float randomAngle = Random.Range(90f + AngleMin, 90f + AngleMax);
+        float randomAngle = Random.Range(AngleMin, AngleMax);
         Quaternion rotation = Quaternion.Euler(0, 0, -randomAngle);
         Instantiate(ringPrefab, pos, rotation);
     }

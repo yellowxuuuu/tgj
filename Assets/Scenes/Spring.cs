@@ -17,12 +17,18 @@ public class Spring : MonoBehaviour
     public float bounceStrength = 0.05f;   // 弹起的力度
     public float bounceAngle = 45f;      // 弹起的角度
 
+    [Header("Resources path (under Assets/Resources/)")]
+    public string resourcesFolder = "Material";
+    private Sprite hitSprite;
+
     public Transform player;
     private bool used = false;
+
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Spring2");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -63,13 +69,13 @@ public class Spring : MonoBehaviour
             return;
         }
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        sr.color = hitColor;
+        sr.sprite = hitSprite;
     }
 
     void BouncePlayer(Collider2D other)
     {
         PlayerController playercontroller = other.GetComponent<PlayerController>();
-        bounceAngle = - transform.rotation.eulerAngles.z - 90f;
+        bounceAngle = - transform.rotation.eulerAngles.z;
         Vector3 BounceMotion = new Vector3(
                                     bounceStrength * Mathf.Sin(bounceAngle * Mathf.Deg2Rad),
                                     bounceStrength * Mathf.Cos(bounceAngle * Mathf.Deg2Rad),

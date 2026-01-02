@@ -17,12 +17,18 @@ public class Ring : MonoBehaviour
     public int midiPitch = 60; // 由生成器赋值
     public bool ismidi = false;
 
+    [Header("Resources path (under Assets/Resources/)")]
+    public string resourcesFolder = "Material";
+    private Sprite hitSprite;
+
     private Transform player;
     private bool used = false;
+
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Ring2");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -75,7 +81,7 @@ public class Ring : MonoBehaviour
             return;
         }
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        sr.color = hitColor;
+        sr.sprite = hitSprite;
     }
 
 

@@ -16,6 +16,10 @@ public class Trail : MonoBehaviour
     public float sustainTime = 2.0f;   // 持续时间
     public float tailWidth = 0.03f;      // 尾迹宽度
 
+    [Header("Resources path (under Assets/Resources/)")]
+    public string resourcesFolder = "Material";
+    private Sprite hitSprite;
+
     public Transform player;
     private bool used = false;
 
@@ -33,6 +37,7 @@ public class Trail : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Trail2");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -83,7 +88,7 @@ public class Trail : MonoBehaviour
             return;
         }
         SpriteRenderer sr = GetComponent<SpriteRenderer>();
-        sr.color = hitColor;
+        sr.sprite = hitSprite;
     }
 
 IEnumerator PlaySustainFor(AudioClip clip, float t)

@@ -963,7 +963,7 @@ MonoBehaviour:
   verticalRangemax: 24
   verticalRangemin: 24
   startX: 6
-  ringCount: 30
+  ringCount: 10
   avoidRadius: 1
   ringLayer:
     serializedVersion: 2
@@ -2121,7 +2121,7 @@ MonoBehaviour:
   spawnLeadTime: 2
   startX: 4.5
   speed: 0.5
-  initColor: {r: 0, g: 0, b: 1, a: 1}
+  initColor: {r: 1, g: 1, b: 0, a: 1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
