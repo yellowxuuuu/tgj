@@ -11,6 +11,9 @@ public class SpringSpawner : MonoBehaviour
     public float startX = 8.5f;   // spawn ahead of player
     public int ringCount = 1;  // number of rings to spawn
 
+    public float AngleMin = 0f;
+    public float AngleMax = 0f;
+
     private float timer = 0f;
     private Transform player;
 
@@ -39,7 +42,7 @@ public class SpringSpawner : MonoBehaviour
             player.position.y + Random.Range(-verticalRangemin, verticalRangemax),
             0
         );
-        float randomAngle = Random.Range(100, 150);
+        float randomAngle = Random.Range(90f + AngleMin, 90f + AngleMax);
         Quaternion rotation = Quaternion.Euler(0, 0, -randomAngle);
         Instantiate(ringPrefab, pos, rotation);
     }

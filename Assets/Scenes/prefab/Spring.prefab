@@ -156,6 +156,6 @@ MonoBehaviour:
   DelPos: 3
   OnCollisionDestroy: 0
   hitColor: {r: 0, g: 1, b: 0, a: 1}
-  bounceStrength: 0.05
+  bounceStrength: 0.06
   bounceAngle: 45
   player: {fileID: 0}

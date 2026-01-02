@@ -169,8 +169,11 @@ IEnumerator PlaySustainFor(AudioClip clip, float t)
 
         // 如果线渲染不出来，给一个简单材质（内置也能用）
         // URP 下更推荐用 Unlit 材质，但先这样能跑
+        // 先保证有材质
         if (lr.material == null)
-            lr.material = new Material(Shader.Find("Sprites/Default"));
+        {
+            lr.material = new Material(Shader.Find("Particles/Additive"));
+        }
     }
 
     IEnumerator StopDrawingAfter(float t)  // 协程：中止绘制计时器

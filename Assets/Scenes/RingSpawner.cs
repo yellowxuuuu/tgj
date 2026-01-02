@@ -6,6 +6,7 @@ public class RingSpawner : MonoBehaviour
 {
     public GameObject ringPrefab;
     public float spawnInterval = 1.0f;
+    public float horizonalRange = 0f;
     public float verticalRangemax = 4f;
     public float verticalRangemin = 24f;
     public float startX = 8f;   // spawn ahead of player
@@ -34,7 +35,7 @@ public class RingSpawner : MonoBehaviour
 
     void SpawnRing()
     {
-        float xrandPos = Random.Range(-1f, 1f);
+        float xrandPos = Random.Range(-horizonalRange, horizonalRange);
         Vector3 pos = new Vector3(
             player.position.x + startX + xrandPos,
             player.position.y + Random.Range(-verticalRangemin, verticalRangemax),

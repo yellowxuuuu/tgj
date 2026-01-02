@@ -14,7 +14,7 @@ public class Spring : MonoBehaviour
     public Color hitColor = Color.green;
 
     [Header("Bounce Settings")]
-    public float bounceStrength = 0.2f;   // 弹起的力度
+    public float bounceStrength = 0.05f;   // 弹起的力度
     public float bounceAngle = 45f;      // 弹起的角度
 
     public Transform player;
@@ -75,7 +75,7 @@ public class Spring : MonoBehaviour
                                     bounceStrength * Mathf.Cos(bounceAngle * Mathf.Deg2Rad),
                                     0f);        
         playercontroller.Motion = new Vector3(
-                                    0.4f * playercontroller.Motion.x + BounceMotion.x,
+                                    1.0f * playercontroller.Motion.x + BounceMotion.x,
                                     0.0f * playercontroller.Motion.x + BounceMotion.y,
                                     0f);
 

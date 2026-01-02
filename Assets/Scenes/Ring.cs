@@ -61,5 +61,7 @@ public class Ring : MonoBehaviour
         sr.color = hitColor;
     }
 
+
+
 }
 
