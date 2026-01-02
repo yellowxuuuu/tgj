@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5001172157925846514}
   - component: {fileID: 6897551586966778215}
   - component: {fileID: 4610171315181611152}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -143,24 +143,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1175d228bbccbfb4aa523af775cfa96c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sounds:
-  - {fileID: 8300000, guid: 8ba81af7b29995847849615fc8747297, type: 3}
-  - {fileID: 8300000, guid: a37aa035b9eaf854ca8879200cccf070, type: 3}
-  - {fileID: 8300000, guid: 2c064ffbae35f3f42a37f7145ad86efe, type: 3}
-  - {fileID: 8300000, guid: 64d5fc91a10940545ad49bda584e8b19, type: 3}
-  - {fileID: 8300000, guid: 61e24999d49834f46a45a2d18e880547, type: 3}
-  - {fileID: 8300000, guid: 0763e43e283f5ab4abbbba6171ae64a1, type: 3}
-  - {fileID: 8300000, guid: 2de3a691a49ab0a4185d5ac31c9a4276, type: 3}
-  - {fileID: 8300000, guid: 9f7ff9f4de50f364ba7b78e1292135cb, type: 3}
-  - {fileID: 8300000, guid: cbe3e27e27db5c241ae2cb9e8440552e, type: 3}
-  - {fileID: 8300000, guid: 9c15cdb32c3733c46aa8e9e0de661058, type: 3}
-  - {fileID: 8300000, guid: 64d469527fdd09743908d4db24e7bebe, type: 3}
-  - {fileID: 8300000, guid: fd8acb2f964c8bb43b1edd6a0840c087, type: 3}
-  - {fileID: 8300000, guid: 97e05f7862dbef3439650aa8d199f52b, type: 3}
-  - {fileID: 8300000, guid: 6e653b8cefaa95a48bcc03867c5273f5, type: 3}
-  - {fileID: 8300000, guid: 0b053d7ae521eb544bdd51a41da19dba, type: 3}
-  - {fileID: 8300000, guid: 7591b5af444bb9c44acda7f8ef491634, type: 3}
-  - {fileID: 8300000, guid: 99c57503e58bdd94eb1c0eca3133c95d, type: 3}
   volume: 1.5
-  player: {fileID: 0}
   DelPos: 3
+  OnCollisionDestroy: 0
+  hitColor: {r: 0, g: 1, b: 0, a: 1}
+  midiPitch: 60
+  ismidi: 0

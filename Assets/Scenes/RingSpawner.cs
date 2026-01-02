@@ -7,10 +7,13 @@ public class RingSpawner : MonoBehaviour
     public GameObject ringPrefab;
     public float spawnInterval = 1.0f;
     public float horizonalRange = 0f;
-    public float verticalRangemax = 4f;
+    public float verticalRangemax = 24f;
     public float verticalRangemin = 24f;
-    public float startX = 8f;   // spawn ahead of player
+    public float startX = 6f;   // spawn ahead of player
     public int ringCount = 30;  // number of rings to spawn
+
+    public float avoidRadius = 1.0f;          // 检测半径（按你的单位调）
+    public LayerMask ringLayer;               // 把 Ring 的 collider 放在这个 layer 上
 
     private float timer = 0f;
     private Transform player;
@@ -18,6 +21,7 @@ public class RingSpawner : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        ringLayer = LayerMask.GetMask("Ring");
     }
 
     void FixedUpdate()
@@ -33,6 +37,7 @@ public class RingSpawner : MonoBehaviour
         }
     }
 
+
     void SpawnRing()
     {
         float xrandPos = Random.Range(-horizonalRange, horizonalRange);
@@ -42,6 +47,28 @@ public class RingSpawner : MonoBehaviour
             0
         );
 
-        Instantiate(ringPrefab, pos, Quaternion.identity);
+        if (HasMidiRingNearby(pos, avoidRadius))
+        {
+            // 附近已有 MIDI 音符，直接不生成
+            return;
+        }
+
+        GameObject obj = Instantiate(ringPrefab, pos, Quaternion.identity);
+        var ring = obj.GetComponent<Ring>();
+        ring.midiPitch = (int)Random.Range(60, 83);
     }
+
+
+    bool HasMidiRingNearby(Vector3 pos, float radius)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, radius);
+        foreach (var h in hits)
+        {
+            var r = h.GetComponent<Ring>();
+            if (r != null && r.ismidi)
+                return true;
+        }
+        return false;
+    }
+
 }

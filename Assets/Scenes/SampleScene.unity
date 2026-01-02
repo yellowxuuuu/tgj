@@ -262,6 +262,51 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2411182376151884315, guid: 1b285108f41c9dc4794ebb2c7c94f5d3, type: 3}
   m_PrefabInstance: {fileID: 1054841215}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &386087935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 386087937}
+  - component: {fileID: 386087936}
+  m_Layer: 0
+  m_Name: AudioManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &386087936
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386087935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6cfb2e686d3d394d90924ef88e0fdd2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourcesFolder: Sound/Piano
+--- !u!4 &386087937
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386087935}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.186022, y: -0.62425, z: -9.866533}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &445430892
 GameObject:
   m_ObjectHideFlags: 0
@@ -400,7 +445,7 @@ MonoBehaviour:
   verticalRangemax: 24
   verticalRangemin: 24
   startX: 8.5
-  ringCount: 2
+  ringCount: 1
   sustainTimeMax: 2
   sustainTimeMin: 0.5
   tailWidthMax: 0.04
@@ -917,8 +962,12 @@ MonoBehaviour:
   horizonalRange: 0
   verticalRangemax: 24
   verticalRangemin: 24
-  startX: 8
-  ringCount: 50
+  startX: 6
+  ringCount: 30
+  avoidRadius: 1
+  ringLayer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!4 &625152600
 Transform:
   m_ObjectHideFlags: 0
@@ -1197,7 +1246,7 @@ MonoBehaviour:
   verticalRangemax: 24
   verticalRangemin: 24
   startX: 8.5
-  ringCount: 2
+  ringCount: 1
   AngleMin: 0
   AngleMax: 0
 --- !u!4 &1072017314 stripped
@@ -1515,11 +1564,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AngleOffset: 45
-  AccelScale: 0.0004
+  AccelScale: 0.0003
   AccelTurningScaleUp: 2.2
   AccelTurningScaleDown: 1.7
-  AccelUp: {x: 1, y: 1.5, z: 0}
-  AccelDown: {x: 1, y: -1.5, z: 0}
+  AccelUp: {x: 1.2, y: 1.5, z: 0}
+  AccelDown: {x: 1.2, y: -1.5, z: 0}
   Friction: {x: 0.98, y: 0.985, z: 1}
   Accel: {x: 0, y: 0, z: 0}
   Motion: {x: 0.01, y: -0.01, z: 0}
@@ -1953,6 +2002,7 @@ Transform:
   - {fileID: 625152600}
   - {fileID: 1062858255}
   - {fileID: 501179510}
+  - {fileID: 2084506039}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1928988035
@@ -2020,6 +2070,58 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1b285108f41c9dc4794ebb2c7c94f5d3, type: 3}
+--- !u!1 &2084506038
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2084506039}
+  - component: {fileID: 2084506040}
+  m_Layer: 0
+  m_Name: MidiNoteSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2084506039
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084506038}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1909596931}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2084506040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2084506038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0468aad20034c845aa6e1662cefb571, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  midiJson: {fileID: 4900000, guid: e98384d5601d5bc45b3ba80616ba503e, type: 3}
+  player: {fileID: 0}
+  notePrefab: {fileID: 2252015157023205125, guid: 94b7c0622b980a040afd76c11755eac8, type: 3}
+  musicStartDelay: 8
+  spawnLeadTime: 2
+  startX: 4.5
+  speed: 0.5
+  initColor: {r: 0, g: 0, b: 1, a: 1}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2029,3 +2131,4 @@ SceneRoots:
   - {fileID: 1355453048}
   - {fileID: 1909596931}
   - {fileID: 445430893}
+  - {fileID: 386087937}
