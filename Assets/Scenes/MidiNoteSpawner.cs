@@ -20,115 +20,106 @@ public class MidiNotes {
 
 public class MidiNoteSpawner : MonoBehaviour
 {
-    [Header("Input JSON")]
-    public TextAsset midiJson;
-
     [Header("References")]
     public Transform player;
     public GameObject notePrefab;
 
-    [Header("Timing")]
-    public float musicStartDelay = 5f;     // 你要不要延迟开播
-    public float spawnLeadTime = 2.0f;     // 提前多少秒生成
-    public float startX = 6.5f;              // spawn ahead of player
-    public float speed = 1f;
+    [Header("Spawn settings")]
+    public float startX = 5.0f;          // 在玩家前方多远开始放
+    public float startY = 0.8f;         // 竖直偏移
 
-    [Header("Ring")]
-    public Color initColor = Color.yellow;
+    [Header("Visual")]
+    public Color[] ownerColors;          // [0]=玩家, [1]=NPC1...
+    public Transform tracksRoot;         // 生成的音符挂到这里，方便清理
 
-    private MidiNotes data;
-    private float bpm;
-    private float v;                 // 世界速度（单位/秒）
-    private float beatInterval;      // 每拍世界距离
-    private float startDspTime;
 
-    void Start()
+    public List<Transform> SpawnTrack(
+        string midiJsonName,
+        int ownerId,
+        float speedMult = 1f,
+        float fluctuateMult = 1f,
+        Transform reference = null
+    )
     {
-        // 1) 解析 JSON（JsonUtility 要求字段名一致）
-        data = JsonUtility.FromJson<MidiNotes>(midiJson.text);
-        bpm = data.bpm;
+        // 1) 加载 JSON（推荐放到 Resources/MidiJson/xxx 里）
+        TextAsset ta = Resources.Load<TextAsset>($"MidiJson/{midiJsonName}");
+        if (ta == null)
+        {
+            Debug.LogError($"Midi json not found: Resources/MidiJson/{midiJsonName}.json");
+            return new List<Transform>();
+        }
+        MidiNotes data = JsonUtility.FromJson<MidiNotes>(ta.text);
 
-        // 2) 从 player Motion 推速度
+        // 2) 推导水平世界速度 v（单位：世界单位/秒）
+        //    你玩家 Motion.x 的稳态： M = (M*Friction.x) + (AccelScale*AccelUp.x)
+        //    => M = a / (1 - fx)
+        //    其中 a = AccelScale * 1
         player = GameObject.FindWithTag("Player").transform;
+        if (ownerId == 0) reference = player;
+        else if (ownerId == 1) reference = GameObject.Find("NPC1").transform;
+        else if (ownerId == 2) reference = GameObject.Find("NPC2").transform;
+        else if (ownerId == 3) reference = GameObject.Find("NPC3").transform;
         var pc = player.GetComponent<PlayerController>();
         float motionXPerStep = pc.Motion.x; // 每 FixedUpdate 位移
-        v = motionXPerStep / Time.fixedDeltaTime;
+        float v = motionXPerStep / Time.fixedDeltaTime;
+        float beatInterval = v * (60f / data.bpm);
 
-        // 3) 你要的 BeatInterval
-        beatInterval = v * (60f / bpm);
-        Debug.Log($"bpm={bpm}, v={v}, beatInterval={beatInterval}");
+        // 3) 轨道基准点
+        float x0 = reference.position.x + startX;
+        float y0 = (0.2f * reference.position.y + 0.8f * player.position.y) + startY;
 
-        // 4) 记录起始时间（也可以用 AudioSettings.dspTime 做更稳的音画同步）
-        // startDspTime = (float)AudioSettings.dspTime + musicStartDelay;
+        // 4) 生成
+        var list = new List<Transform>(data.notes.Count);
 
-        // 5) 直接一次性生成所有 note 的“静态位置”（如果你是滚动轨道式）
-
-        StartCoroutine(SpawnAllNotesStatic(musicStartDelay));
-    }
-
-    float SongTime()
-    {
-        return (float)AudioSettings.dspTime - startDspTime;
-    }
-
-    IEnumerator SpawnAllNotesStatic(float t)
-    {
-        yield return new WaitForSeconds(t);
-
-        // 选择一个“t=0 对应的基准点”：这里用 hitLine 的位置
-        float x0 = player.position.x + startX;
-        float y0 = player.position.y;
+        // 每个 owner 给一个固定 y 偏移，让三 NPC 不挤在一起（你也可以关掉）
+        float laneOffsetY = (ownerId) * 0f; // 按需调
+        Transform parent = tracksRoot != null ? tracksRoot : null;
 
         foreach (var n in data.notes)
         {
-            // 推荐：用秒映射位置
-            float x = x0 + n.t0 * v / speed;
-            float y = y0 + Fluctuate(n.t0, data.bpm);
+            float x = x0 + n.t0 * v / speedMult;
+            float y = y0 + laneOffsetY + Fluctuate(n.t0, data.bpm, ownerId) * fluctuateMult;
 
-            var go = Instantiate(notePrefab);
+            GameObject go = Instantiate(notePrefab, parent);
             go.transform.position = new Vector3(x, y, 0f);
+
             var ring = go.GetComponent<Ring>();
             ring.midiPitch = n.p;
             ring.ismidi = true;
+            ring.isnpc = (ownerId != 0);
+            ring.ownerId = ownerId;
+
             var sr = go.GetComponent<SpriteRenderer>();
-            sr.color = initColor;
-            float scaler =  (ring.midiPitch - 60f) / (83f - 60f);
+            if (ownerColors != null && ownerColors.Length > ownerId) sr.color = ownerColors[ownerId];
+            // 缩放按 pitch（你原来的逻辑）
+            float scaler = (ring.midiPitch - 60f) / (83f - 60f);
             float scale = Mathf.Lerp(1.2f, 0.8f, scaler);
             go.transform.localScale *= scale;
-            // 你可以把 pitch/vel 存到 note 脚本里
-            // go.GetComponent<NoteView>().Init(n.p, n.v, n.t0, n.t1);
+            list.Add(go.transform);
         }
+
+        return list;
     }
 
-    // 让生成的音符上下起伏
-    float Fluctuate(float t, float bpm)
-    {
-        // t: seconds since song start (e.g. n.t0)
-        // bpm: beats per minute
 
-        // ---- 1) 秒 -> 拍（beats）
+    float Fluctuate(float t, float bpm, int ownerId)
+    {
         float beats = t * bpm / 60f;
 
-        // ---- 2) 主波：两条低频正弦叠加（按拍走）
-        // 频率单位：cycles per beat（每拍多少个周期）
-        // 例如 0.125 = 8拍一个周期；0.0833 ≈ 12拍一个周期
         float wave =
-            0.75f * Mathf.Sin(2f * Mathf.PI * 0.125f * beats) +
+            0.65f * Mathf.Sin(2f * Mathf.PI * 0.125f * beats) +
             0.25f * Mathf.Sin(2f * Mathf.PI * 0.0833333f * beats + 1.7f) +
             6f    * Mathf.Sin(2f * Mathf.PI * 0.01f * beats + 3.2f);
 
-        // ---- 3) 小噪声：Perlin（连续、不会跳）
-        // PerlinNoise 输出 [0,1] -> 转成 [-1,1]
-        const float noiseSeed = 12.345f;     // 固定种子，保证同一首歌每次生成一致
-        const float noiseFreq = 0.55f;       // 噪声频率（按拍的尺度），越小越平滑
+        // 用 ownerId 做种子偏移，保证不同 NPC 波动不同但稳定
+        float noiseSeed = 12.345f + ownerId * 100.0f;
+        float noiseFreq = 0.55f;
         float pn = Mathf.PerlinNoise(noiseSeed, beats * noiseFreq);
         float noise = (pn - 0.5f) * 2f;
 
-        // ---- 4) 振幅（你可按场景尺度调整）
-        const float waveAmp = 0.6f;          // 主波幅度（单位：世界坐标）
-        const float noiseAmp = 0.2f;        // 噪声幅度（比主波小）
+        const float waveAmp = 0.6f;
+        const float noiseAmp = 0.6f;
 
-        // 返回 y 偏移量（你外面用 y = y0 + Fluctuate(...)）
-        return waveAmp * wave + noiseAmp * noise - 0.5f;
+        return waveAmp * wave + noiseAmp * noise;
     }
 }

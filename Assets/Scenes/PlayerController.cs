@@ -8,12 +8,12 @@ public class PlayerController : MonoBehaviour
     public float AngleOffset = 45f;
 
     [Header("玩家运动")]
-    public float AccelScale = 0.0004f;  // 速度缩放
-    public float AccelTurningScaleUp = 1.8f;
-    public float AccelTurningScaleDown = 1.3f;
-    public Vector3 AccelUp =  new Vector3(1f, 1f, 0f);
-    public Vector3 AccelDown =  new Vector3(1f, -1f, 0f);
-    public Vector3 Friction = new Vector3(0.98f, 0.99f, 1f);
+    public float AccelScale = 0.0003f;  // 速度缩放
+    public float AccelTurningScaleUp = 2.2f;
+    public float AccelTurningScaleDown = 1.7f;
+    public Vector3 AccelUp =  new Vector3(1.2f, 1.7f, 0f);
+    public Vector3 AccelDown =  new Vector3(1.2f, -1.5f, 0f);
+    public Vector3 Friction = new Vector3(0.98f, 0.985f, 1f);
     public Vector3 Accel = new Vector3(0f, 0f, 0f);
     public Vector3 Motion = new Vector3(0.01f, -0.01f, 0f);
 
@@ -46,13 +46,6 @@ public class PlayerController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0f, 0f, angle - AngleOffset);
         }
 
-        // // 周期边界条件
-        // if (transform.position.x > 4.5f)
-        //     transform.position = new Vector3(-4.5f, transform.position.y, transform.position.z);
-        // if (transform.position.y > 2f)
-        //     transform.position = new Vector3(transform.position.x, -2f, transform.position.z);
-        // if (transform.position.y < -2f)
-        //     transform.position = new Vector3(transform.position.x, 2f, transform.position.z);
     }
 
 }

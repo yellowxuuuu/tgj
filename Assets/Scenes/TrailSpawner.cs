@@ -18,10 +18,13 @@ public class TrailSpawner : MonoBehaviour
 
     private float timer = 0f;
     private Transform player;
+    public float avoidRadius = 1.0f;
+    public LayerMask ringLayer;    
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        ringLayer = LayerMask.GetMask("Ring");
     }
 
     void FixedUpdate()
@@ -44,6 +47,10 @@ public class TrailSpawner : MonoBehaviour
             player.position.y + Random.Range(-verticalRangemin, verticalRangemax),
             0
         );
+
+        if (HasMidiRingNearby(pos, avoidRadius)) return;
+
+
         GameObject obj = Instantiate(ringPrefab, pos, Quaternion.identity);
 
         Trail trail = obj.GetComponent<Trail>();
@@ -51,4 +58,19 @@ public class TrailSpawner : MonoBehaviour
         trail.sustainTime = Random.Range(sustainTimeMin, sustainTimeMax);
         trail.tailWidth   = Random.Range(tailWidthMin, tailWidthMax);
     }
+
+    bool HasMidiRingNearby(Vector3 pos, float radius)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, radius);
+        foreach (var h in hits)
+        {
+            var r = h.GetComponent<Ring>();
+            if (r != null && r.ismidi)
+                return true;
+        }
+        return false;
+    }
+
+
+
 }

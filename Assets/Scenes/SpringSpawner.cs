@@ -16,10 +16,13 @@ public class SpringSpawner : MonoBehaviour
 
     private float timer = 0f;
     private Transform player;
+    public float avoidRadius = 1.0f;
+    public LayerMask ringLayer;    
 
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
+        ringLayer = LayerMask.GetMask("Ring");
     }
 
     void FixedUpdate()
@@ -44,6 +47,22 @@ public class SpringSpawner : MonoBehaviour
         );
         float randomAngle = Random.Range(AngleMin, AngleMax);
         Quaternion rotation = Quaternion.Euler(0, 0, -randomAngle);
+
+        if (HasMidiRingNearby(pos, avoidRadius)) return;
+
         Instantiate(ringPrefab, pos, rotation);
     }
+
+    bool HasMidiRingNearby(Vector3 pos, float radius)
+    {
+        Collider2D[] hits = Physics2D.OverlapCircleAll(pos, radius);
+        foreach (var h in hits)
+        {
+            var r = h.GetComponent<Ring>();
+            if (r != null && r.ismidi)
+                return true;
+        }
+        return false;
+    }
+    
 }
