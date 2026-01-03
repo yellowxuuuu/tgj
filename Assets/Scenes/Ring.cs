@@ -28,7 +28,7 @@ public class Ring : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
-        hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Ring2");
+        hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Ring4");
     }
 
     void OnTriggerEnter2D(Collider2D other)

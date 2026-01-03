@@ -55,7 +55,10 @@ public class RingSpawner : MonoBehaviour
 
         GameObject obj = Instantiate(ringPrefab, pos, Quaternion.identity);
         var ring = obj.GetComponent<Ring>();
-        ring.midiPitch = (int)Random.Range(60, 83);
+        ring.midiPitch = (int) Random.Range(60, 83);
+        float scaler =  (ring.midiPitch - 60f) / (83f - 60f);
+        float scale = Mathf.Lerp(1.2f, 0.8f, scaler);
+        obj.transform.localScale *= scale;
     }
 
 

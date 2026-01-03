@@ -13,8 +13,8 @@ public class TrailSpawner : MonoBehaviour
 
     public float sustainTimeMax = 3f;
     public float sustainTimeMin = 1f;
-    public float tailWidthMax = 0.04f;
-    public float tailWidthMin = 0.01f;
+    public float tailWidthMax = 1.2f;
+    public float tailWidthMin = 0.8f;
 
     private float timer = 0f;
     private Transform player;

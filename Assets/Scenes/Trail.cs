@@ -14,7 +14,7 @@ public class Trail : MonoBehaviour
 
     [Header("Trail Settings")]
     public float sustainTime = 2.0f;   // 持续时间
-    public float tailWidth = 0.03f;      // 尾迹宽度
+    public float tailWidth = 1f;      // 尾迹宽度
 
     [Header("Resources path (under Assets/Resources/)")]
     public string resourcesFolder = "Material";
@@ -37,7 +37,8 @@ public class Trail : MonoBehaviour
     void Start()
     {
         player = GameObject.FindWithTag("Player").transform;
-        hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Trail2");
+        lr = GetComponent<LineRenderer>();
+        hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Trail4");
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -130,8 +131,8 @@ IEnumerator PlaySustainFor(AudioClip clip, float t)
         // 1) 绑定玩家
         player = ColliderPlayer.transform;
 
-        // 2) 确保有 LineRenderer
-        EnsureLineRenderer();
+        //2) 初始化 LineRender
+        InitLineRender();
 
         // 4) 开始绘制(播放音乐)
         pts.Clear();
@@ -150,36 +151,12 @@ IEnumerator PlaySustainFor(AudioClip clip, float t)
         // if (col != null) col.enabled = false;
     }
 
-    void EnsureLineRenderer()  // 确保有 LineRenderer
+    void InitLineRender()
     {
-        // lr is LineRender
-        if (lr != null) return;
-
-        lr = GetComponent<LineRenderer>();
-        if (lr == null) lr = gameObject.AddComponent<LineRenderer>();
-
-        lr.useWorldSpace = true;
-        lr.positionCount = 0;
         lr.widthMultiplier = tailWidth;
 
-        // 圆角好看点
-        lr.numCapVertices = 6;
-        lr.numCornerVertices = 6;
-
-        // 颜色：起点更亮，末端略透明（你也可以用 hitColor 做主题色）
-        Color c0 = hitColor; c0.a = 1f;
-        Color c1 = hitColor; c1.a = 0.7f;
-        lr.startColor = c0;
-        lr.endColor = c1;
-
-        // 如果线渲染不出来，给一个简单材质（内置也能用）
-        // URP 下更推荐用 Unlit 材质，但先这样能跑
-        // 先保证有材质
-        if (lr.material == null)
-        {
-            lr.material = new Material(Shader.Find("Particles/Additive"));
-        }
     }
+
 
     IEnumerator StopDrawingAfter(float t)  // 协程：中止绘制计时器
     {

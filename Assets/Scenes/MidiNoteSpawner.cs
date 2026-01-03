@@ -92,6 +92,9 @@ public class MidiNoteSpawner : MonoBehaviour
             ring.ismidi = true;
             var sr = go.GetComponent<SpriteRenderer>();
             sr.color = initColor;
+            float scaler =  (ring.midiPitch - 60f) / (83f - 60f);
+            float scale = Mathf.Lerp(1.2f, 0.8f, scaler);
+            go.transform.localScale *= scale;
             // 你可以把 pitch/vel 存到 note 脚本里
             // go.GetComponent<NoteView>().Init(n.p, n.v, n.t0, n.t1);
         }
