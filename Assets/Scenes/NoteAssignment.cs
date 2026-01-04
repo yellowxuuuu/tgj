@@ -14,7 +14,7 @@ public class NoteAssignment : MonoBehaviour
 
     void Start()
     {
-        spawner = GetComponent<MidiNoteSpawner>();
+        spawner = GetComponent<MidiNoteSpawner>(); 
         StartCoroutine(Note1(15f));
         
     }
@@ -22,8 +22,8 @@ public class NoteAssignment : MonoBehaviour
     IEnumerator Note1 (float t)
     {
         yield return new WaitForSeconds(t);
-        var playerTrack = spawner.SpawnTrack("HappyBirthday", ownerId: 0, speedMult);
+        var playerTrack = spawner.SpawnTrack("Canon", ownerId: 0, prefabId: 2, speedMult);
         Transform npc1 = GameObject.Find("NPC1").transform;
-        var npc1Track = spawner.SpawnTrack("HappyBirthday", ownerId: 1, speedMult, fluctuateMult: 0.7f, reference: npc1);
+        var npc1Track = spawner.SpawnTrack("Canon", ownerId: 1, prefabId: 2, speedMult, fluctuateMult: 0.7f, reference: npc1, beatoffset: 16f);
     }
 }

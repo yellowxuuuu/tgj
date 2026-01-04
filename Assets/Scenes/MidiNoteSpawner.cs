@@ -22,7 +22,7 @@ public class MidiNoteSpawner : MonoBehaviour
 {
     [Header("References")]
     public Transform player;
-    public GameObject notePrefab;
+    public GameObject[] notePrefab;
 
     [Header("Spawn settings")]
     public float startX = 5.0f;          // 在玩家前方多远开始放
@@ -36,9 +36,11 @@ public class MidiNoteSpawner : MonoBehaviour
     public List<Transform> SpawnTrack(
         string midiJsonName,
         int ownerId,
+        int prefabId,
         float speedMult = 1f,
         float fluctuateMult = 1f,
-        Transform reference = null
+        Transform reference = null,
+        float beatoffset = 0f
     )
     {
         // 1) 加载 JSON（推荐放到 Resources/MidiJson/xxx 里）
@@ -62,11 +64,11 @@ public class MidiNoteSpawner : MonoBehaviour
         var pc = player.GetComponent<PlayerController>();
         float motionXPerStep = pc.Motion.x; // 每 FixedUpdate 位移
         float v = motionXPerStep / Time.fixedDeltaTime;
-        float beatInterval = v * (60f / data.bpm);
+        float beatInterval = v * (60f / data.bpm) / speedMult;
 
         // 3) 轨道基准点
-        float x0 = reference.position.x + startX;
-        float y0 = (0.2f * reference.position.y + 0.8f * player.position.y) + startY;
+        float x0 = reference.position.x + startX + beatoffset * beatInterval;
+        float y0 = (0.0f * reference.position.y + 1.0f * player.position.y) + startY;
 
         // 4) 生成
         var list = new List<Transform>(data.notes.Count);
@@ -78,21 +80,38 @@ public class MidiNoteSpawner : MonoBehaviour
         foreach (var n in data.notes)
         {
             float x = x0 + n.t0 * v / speedMult;
-            float y = y0 + laneOffsetY + Fluctuate(n.t0, data.bpm, ownerId) * fluctuateMult;
+            float y = y0 + laneOffsetY + Fluctuate(x0 + n.t0, data.bpm, ownerId) * fluctuateMult;
 
-            GameObject go = Instantiate(notePrefab, parent);
+            GameObject go = Instantiate(notePrefab[prefabId], parent);
             go.transform.position = new Vector3(x, y, 0f);
 
-            var ring = go.GetComponent<Ring>();
-            ring.midiPitch = n.p;
-            ring.ismidi = true;
-            ring.isnpc = (ownerId != 0);
-            ring.ownerId = ownerId;
+            if (prefabId == 0)  // Ring
+            {
+                var ring = go.GetComponent<Ring>();
+                ring.volume = n.v * 0.01f;
+                ring.midiPitch = n.p;
+                ring.ismidi = true;
+                ring.isnpc = (ownerId != 0);
+                ring.ownerId = ownerId;
+            }
 
+            if (prefabId == 2)  // Trail
+            {
+                var ring = go.GetComponent<Trail>();
+                ring.volume = n.v * 0.002f;
+                ring.midiPitch = n.p;
+                ring.sustainTime = (n.t1 - n.t0) / speedMult ;
+                float widthscaler = (n.p - 60f) / (83f - 60f);
+                ring.tailWidth = Mathf.Lerp(1.2f, 0.8f, widthscaler);
+                ring.ismidi = true;
+                ring.isnpc = (ownerId != 0);
+                ring.ownerId = ownerId;
+            }
+            
             var sr = go.GetComponent<SpriteRenderer>();
             if (ownerColors != null && ownerColors.Length > ownerId) sr.color = ownerColors[ownerId];
             // 缩放按 pitch（你原来的逻辑）
-            float scaler = (ring.midiPitch - 60f) / (83f - 60f);
+            float scaler = (n.p - 60f) / (83f - 60f);
             float scale = Mathf.Lerp(1.2f, 0.8f, scaler);
             go.transform.localScale *= scale;
             list.Add(go.transform);
@@ -107,9 +126,9 @@ public class MidiNoteSpawner : MonoBehaviour
         float beats = t * bpm / 60f;
 
         float wave =
-            0.65f * Mathf.Sin(2f * Mathf.PI * 0.125f * beats) +
+            0.55f * Mathf.Sin(2f * Mathf.PI * 0.125f * beats) +
             0.25f * Mathf.Sin(2f * Mathf.PI * 0.0833333f * beats + 1.7f) +
-            6f    * Mathf.Sin(2f * Mathf.PI * 0.01f * beats + 3.2f);
+            5f    * Mathf.Sin(2f * Mathf.PI * 0.01f * beats + 3.2f);
 
         // 用 ownerId 做种子偏移，保证不同 NPC 波动不同但稳定
         float noiseSeed = 12.345f + ownerId * 100.0f;

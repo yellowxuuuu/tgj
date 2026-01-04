@@ -6,11 +6,17 @@ public class Trail : MonoBehaviour
 {
     [Header("Sound settings")]
     public AudioClip[] sounds;
-    public float volume = 1.5f;
+    public float volume = 0.2f;
     public float DelPos = 20f;
     public float releaseTime = 0.2f;   // 淡出时间
     public bool OnCollisionDestroy = false;
     public Color hitColor = Color.green;
+
+    [Header("MIDI")]
+    public int midiPitch = 60; // 由生成器赋值
+    public bool ismidi = false;  // 由生成器赋值
+    public bool isnpc = false;  // 属于NPC乐符
+    public int ownerId = 0;
 
     [Header("Trail Settings")]
     public float sustainTime = 2.0f;   // 持续时间
@@ -44,11 +50,12 @@ public class Trail : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (used) return;
-        if (other.CompareTag("Player"))
+        if (!isnpc && other.CompareTag("Player") || (ownerId == 1 && other.name == "NPC1") ||
+            (ownerId == 2 && other.name == "NPC2") ||(ownerId == 3 && other.name == "NPC3") )
         {
             used = true;
             ColliderPlayer = other;
-            PlaySound();
+            PlaySoundByPitch(midiPitch);
             PlayAnimation(OnCollisionDestroy);
             TailSpawner();
         }
@@ -79,6 +86,24 @@ public class Trail : MonoBehaviour
             StartCoroutine(PlaySustainFor(clip, sustainTime));
             // AudioSource.PlayClipAtPoint(clip, transform.position, volume);
         }
+    }
+
+    void PlaySoundByPitch(int pitch)
+    {
+        var sampler = ViolinSampler.I;
+        if (sampler == null) return;
+
+        AudioClip clip = sampler.GetClipForMidiPitch(pitch);
+        StartCoroutine(PlaySustainFor(clip, sustainTime));
+        // AudioSource asrc = GetComponent<AudioSource>();
+        // if (asrc == null) asrc = gameObject.AddComponent<AudioSource>();
+        // asrc.playOnAwake = false;
+        // asrc.loop = false;          // 关键：循环播放持续音
+        // asrc.spatialBlend = 0f;    // 2D 声音
+        // asrc.volume = volume;       
+
+        // asrc.clip = clip;
+        // asrc.Play();
     }
 
     void PlayAnimation(bool OnCollisionDestroy)

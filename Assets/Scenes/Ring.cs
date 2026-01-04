@@ -8,7 +8,7 @@ public class Ring : MonoBehaviour
 {
     [Header("Sound settings")]
     // public AudioClip[] sounds;
-    public float volume = 1.5f;
+    public float volume = 1f;
     public float DelPos = 3f;
     public bool OnCollisionDestroy = false;
     public Color hitColor = Color.green;
@@ -36,7 +36,8 @@ public class Ring : MonoBehaviour
     void OnTriggerEnter2D(Collider2D other)
     {
         if (used) return;
-        if (!isnpc && other.CompareTag("Player") || (isnpc && other.CompareTag("NPC")))
+        if (!isnpc && other.CompareTag("Player") || (ownerId == 1 && other.name == "NPC1") ||
+            (ownerId == 2 && other.name == "NPC2") ||(ownerId == 3 && other.name == "NPC3") )
         {
             used = true;
             // PlaySound();
@@ -69,10 +70,16 @@ public class Ring : MonoBehaviour
         if (sampler == null) return;
 
         AudioClip clip = sampler.GetClipForMidiPitch(pitch);
-        if (clip != null)
-            AudioSource.PlayClipAtPoint(clip, transform.position, volume);
-        else
-            Debug.LogWarning($"No clip for pitch {pitch}");
+
+        AudioSource asrc = GetComponent<AudioSource>();
+        if (asrc == null) asrc = gameObject.AddComponent<AudioSource>();
+        asrc.playOnAwake = false;
+        asrc.loop = false;          // 关键：循环播放持续音
+        asrc.spatialBlend = 0f;    // 2D 声音
+        asrc.volume = volume;       
+
+        asrc.clip = clip;
+        asrc.Play();
     }
 
     void PlayAnimation(bool OnCollisionDestroy)

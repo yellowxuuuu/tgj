@@ -272,6 +272,7 @@ GameObject:
   m_Component:
   - component: {fileID: 386087937}
   - component: {fileID: 386087936}
+  - component: {fileID: 386087938}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -307,6 +308,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &386087938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386087935}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d57b6513c9835524eb58b6978f68f96f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  resourcesFolder: Sound/Violin
 --- !u!1 &405186221
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,7 +1371,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1062858255
 Transform:
   m_ObjectHideFlags: 0
@@ -1417,37 +1431,6 @@ MonoBehaviour:
   cameraBaseSize: 2
   BackgroundBaseSize: {x: 0, y: 0, z: 0}
   ZoomRatio: 1
---- !u!1 &1139443518
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1139443519}
-  m_Layer: 0
-  m_Name: AIManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &1139443519
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1139443518}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.1325777, y: -0.17582478, z: -9.878539}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1146269556
 GameObject:
   m_ObjectHideFlags: 0
@@ -11933,7 +11916,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  notePrefab: {fileID: 2252015157023205125, guid: 94b7c0622b980a040afd76c11755eac8, type: 3}
+  notePrefab:
+  - {fileID: 2252015157023205125, guid: 94b7c0622b980a040afd76c11755eac8, type: 3}
+  - {fileID: 2252015157023205125, guid: 19771af58b2886b40a8189783a58e391, type: 3}
+  - {fileID: 2252015157023205125, guid: 8aa490dc24631f84abee1e157769b6ed, type: 3}
   startX: 6
   startY: 0.8
   ownerColors:
@@ -11970,4 +11956,3 @@ SceneRoots:
   - {fileID: 1909596931}
   - {fileID: 386087937}
   - {fileID: 1983482228}
-  - {fileID: 1139443519}

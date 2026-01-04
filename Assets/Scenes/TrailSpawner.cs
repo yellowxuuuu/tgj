@@ -54,7 +54,11 @@ public class TrailSpawner : MonoBehaviour
         GameObject obj = Instantiate(ringPrefab, pos, Quaternion.identity);
 
         Trail trail = obj.GetComponent<Trail>();
-        if (trail == null) return;
+        trail.midiPitch = (int) Random.Range(60, 83);
+        float scaler =  (trail.midiPitch - 60f) / (83f - 60f);
+        float scale = Mathf.Lerp(1.2f, 0.8f, scaler);
+        obj.transform.localScale *= scale;
+
         trail.sustainTime = Random.Range(sustainTimeMin, sustainTimeMax);
         trail.tailWidth   = Random.Range(tailWidthMin, tailWidthMax);
     }
@@ -65,7 +69,11 @@ public class TrailSpawner : MonoBehaviour
         foreach (var h in hits)
         {
             var r = h.GetComponent<Ring>();
-            if (r != null && r.ismidi)
+            var s = h.GetComponent<Spring>();
+            var t = h.GetComponent<Trail>();
+            if (r != null &&  r.ismidi ||
+                s != null &&  s.ismidi ||
+                t != null &&  t.ismidi )
                 return true;
         }
         return false;

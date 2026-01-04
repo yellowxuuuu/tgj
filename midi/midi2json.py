@@ -89,4 +89,4 @@ def midi_to_min_json(midi_path: str, json_path: str):
     print(f"[OK] wrote {json_path}, notes={len(notes)}, bpm~{out['bpm']}")
 
 # 用法
-midi_to_min_json("midi/HappyBirthday.mid", "HappyBirthday.json")
+midi_to_min_json("midi/Canon2.mid", "midi/Canon2.json")

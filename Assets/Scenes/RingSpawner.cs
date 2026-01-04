@@ -68,7 +68,11 @@ public class RingSpawner : MonoBehaviour
         foreach (var h in hits)
         {
             var r = h.GetComponent<Ring>();
-            if (r != null && r.ismidi)
+            var s = h.GetComponent<Spring>();
+            var t = h.GetComponent<Trail>();
+            if (r != null &&  r.ismidi ||
+                s != null &&  s.ismidi ||
+                t != null &&  t.ismidi )
                 return true;
         }
         return false;

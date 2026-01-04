@@ -126,6 +126,12 @@ public class NPCController : MonoBehaviour
             if (r != null && r.ownerId == ownerId && r.transform.position.x > transform.position.x)
                 notes.Add(r.transform);
         }
+        var trails = GameObject.FindObjectsOfType<Trail>(includeInactive: false);
+        foreach (var t in trails)
+        {
+            if (t != null && t.ownerId == ownerId && t.transform.position.x > transform.position.x)
+                notes.Add(t.transform);
+        }
         notes.Sort((a, b) => a.position.x.CompareTo(b.position.x));
         index = 0;
     }

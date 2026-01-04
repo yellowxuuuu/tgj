@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2496472067062491222}
   m_Layer: 6
   m_Name: Trail
-  m_TagString: Untagged
+  m_TagString: Ring
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -162,6 +162,10 @@ MonoBehaviour:
   releaseTime: 0.2
   OnCollisionDestroy: 0
   hitColor: {r: 1, g: 1, b: 0, a: 1}
+  midiPitch: 60
+  ismidi: 0
+  isnpc: 0
+  ownerId: 0
   sustainTime: 2
   tailWidth: 1
   resourcesFolder: Material

@@ -17,6 +17,12 @@ public class Spring : MonoBehaviour
     public float bounceStrength = 0.05f;   // 弹起的力度
     public float bounceAngle = 45f;      // 弹起的角度
 
+    [Header("MIDI")]
+    public int midiPitch = 60; // 由生成器赋值
+    public bool ismidi = false;  // 由生成器赋值
+    public bool isnpc = false;  // 属于NPC乐符
+    public int ownerId = 0;
+
     [Header("Resources path (under Assets/Resources/)")]
     public string resourcesFolder = "Material";
     private Sprite hitSprite;
