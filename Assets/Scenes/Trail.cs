@@ -17,6 +17,8 @@ public class Trail : MonoBehaviour
     public bool ismidi = false;  // 由生成器赋值
     public bool isnpc = false;  // 属于NPC乐符
     public int ownerId = 0;
+    public int noteId = -1;
+    PerformanceJudge judge;
 
     [Header("Trail Settings")]
     public float sustainTime = 2.0f;   // 持续时间
@@ -45,28 +47,35 @@ public class Trail : MonoBehaviour
         player = GameObject.FindWithTag("Player").transform;
         lr = GetComponent<LineRenderer>();
         hitSprite = Resources.Load<Sprite>($"{resourcesFolder}/Trail4");
+        judge = FindObjectOfType<PerformanceJudge>();
     }
 
     void OnTriggerEnter2D(Collider2D other)
     {
         if (used) return;
-        if (!isnpc && other.CompareTag("Player") || (ownerId == 1 && other.name == "NPC1") ||
-            (ownerId == 2 && other.name == "NPC2") ||(ownerId == 3 && other.name == "NPC3") )
+        if ((!isnpc && other.CompareTag("Player")) || (ownerId == 1 && other.name == "NPC1") ||
+            (ownerId == 2 && other.name == "NPC2") ||(ownerId == 3 && other.name == "NPC3") ||
+            (!ismidi && (other.CompareTag("Player") || other.CompareTag("NPC"))))
         {
             used = true;
             ColliderPlayer = other;
             PlaySoundByPitch(midiPitch);
             PlayAnimation(OnCollisionDestroy);
             TailSpawner();
+            if (judge != null) judge.ReportHit(ownerId, noteId);
         }
     }
 
     void FixedUpdate()
     {
-        if (transform.position.x < player.position.x - DelPos)
+        if (transform.position.x < player.position.x - 1f)
         {
-            Destroy(gameObject);
+            if (!used)
+            {
+                if (judge != null) judge.ReportMiss(ownerId, noteId);
+            }
         }
+        if (transform.position.x < player.position.x - DelPos) Destroy(gameObject);
 
         if (drawing) 
         {
